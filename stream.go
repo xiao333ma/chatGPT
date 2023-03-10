@@ -12,17 +12,23 @@ func stream(question string) {
 	request.Stream = true
 
 	lastAnswer := ""
-	client.ChatStream(ctx, request, func(response openaigo.ChatCompletionStreamResponse, err error) {
-		if err == nil {
-			res := response.Choices[0].Delta.Content
-			lastAnswer += res
-			fmt.Printf("%s", res)
-		} else {
-			if err != io.EOF {
-				fmt.Println(err)
+
+	events := make(chan openaigo.ChatCompletionStreamInfo)
+	client.ChatStream(ctx, request, events)
+
+	for event := range events {
+		if event.Err == nil {
+			if len(event.Rsp.Choices) > 0 {
+				res := event.Rsp.Choices[0].Delta.Content
+				lastAnswer += res
+				fmt.Printf("%s", res)
 			}
-			fmt.Println("")
-			stream(lastAnswer)
+		} else {
+			if event.Err != io.EOF {
+				fmt.Println(event.Err)
+			}
+			fmt.Println('\n')
 		}
-	})
+	}
+	stream(lastAnswer)
 }

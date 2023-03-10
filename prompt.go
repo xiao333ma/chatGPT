@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
 	"github.com/otiai10/openaigo"
@@ -26,8 +27,12 @@ func defaultMessage() []openaigo.ChatMessage {
 
 func ask(lastAnswer string) openaigo.ChatCompletionRequestBody {
 
-	var question string
-	fmt.Scanln(&question)
+	reader := bufio.NewReader(os.Stdin)
+	question, err := reader.ReadString('\n')
+
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	if strings.EqualFold(question, "重置") {
 		fmt.Println("已重置，请继续提问")
