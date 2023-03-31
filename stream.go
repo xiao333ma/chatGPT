@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/otiai10/openaigo"
+	"github.com/xiao333ma/openaigo"
 	"io"
 )
 

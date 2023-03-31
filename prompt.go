@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"context"
 	"fmt"
-	"github.com/otiai10/openaigo"
+	"github.com/xiao333ma/openaigo"
 	"os"
 	"strings"
 )
@@ -17,6 +17,7 @@ func init() {
 
 	ctx = context.Background()
 	client = openaigo.NewClient(token)
+	client.BaseURL = "https://api.openai.ponyma.net/v1"
 	fmt.Println("开始提问")
 }
 
